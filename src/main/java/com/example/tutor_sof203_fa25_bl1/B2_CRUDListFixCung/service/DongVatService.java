@@ -77,4 +77,30 @@ public class DongVatService {
                 .orElse(null);
     }
 
+    public void sapXepDanhSachTangDanTheoMa(){
+        listDongVat.sort((dv1,dv2)->dv1.getMa().compareTo(dv2.getMa()));
+    }
+
+    public List<DongVat>locDanhSachDongVatCoCanNangNho50(){
+        return listDongVat.stream()
+                .filter(dv -> dv.getCanNang() < 50)
+                .collect(Collectors.toList());
+    }
+
+    // dong vat 2  va Dong vat 2 => dong vat 2
+    // dong Vat => dong vat 2
+    public List<DongVat>search(String searchValue, Double canNangMin, Double canNangMax){
+        String keyword = (searchValue == null) ?"": searchValue.trim().toLowerCase();
+
+        return listDongVat.stream()
+                .filter( dv ->
+                        // loc theo ma va ten
+                        (keyword.isEmpty() || (dv.getMa() !=null && dv.getMa().toLowerCase().contains(keyword))
+                                || (dv.getTen() !=null && dv.getTen().toLowerCase().contains(keyword)))
+                        // loc theo can nang min & max
+                        && (canNangMin == null || ( dv.getCanNang() >=canNangMin))
+                        && (canNangMax == null || ( dv.getCanNang() <=canNangMax))
+                )
+                .collect(Collectors.toList());
+    }
 }
