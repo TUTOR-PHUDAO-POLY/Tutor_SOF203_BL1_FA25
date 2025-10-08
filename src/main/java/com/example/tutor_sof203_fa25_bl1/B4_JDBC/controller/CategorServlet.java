@@ -1,12 +1,13 @@
 package com.example.tutor_sof203_fa25_bl1.B4_JDBC.controller;
 
+import com.example.tutor_sof203_fa25_bl1.B4_JDBC.repository.CategoryRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "CategorServlet", value = {
+@WebServlet(name = "CategoryServlet", value = {
         "/category/hien-thi",
         "/category/add",
         "/category/detail",
@@ -14,6 +15,8 @@ import java.io.IOException;
         "/category/search",
 })
 public class CategorServlet extends HttpServlet {
+
+    private CategoryRepository repo = new CategoryRepository();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uri = request.getRequestURI();
@@ -27,7 +30,9 @@ public class CategorServlet extends HttpServlet {
 
     }
 
-    private void hienThiCategory(HttpServletRequest request, HttpServletResponse response) {
+    private void hienThiCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("list",repo.getAll());
+        request.getRequestDispatcher("/buoi4/index.jsp").forward(request,response);
     }
 
 }

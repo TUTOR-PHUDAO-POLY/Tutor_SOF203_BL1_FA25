@@ -13,7 +13,7 @@
     <button type="submit">Search</button>
 </form>
 <button><a href="/dong-vat/sort">Sắp xếp</a></button><br/><br/>
-<button><a href="/dong-vat/filter">Lọc danh sách cân nặng</a></button>
+<button><a href="/dong-vat/filter">Lọc danh sách cân nặng</a></button><br/><br/>
 <%--Form add--%>
 <form action="/dong-vat/add" method="POST">
     Mã: <input type="text" name="ma" value="${dv1.ma}"/> <br/><br/>

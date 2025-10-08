@@ -18,7 +18,7 @@ public class CategoryRepository {
         // Code
         // B1: Tao cau lenh SQL
         String sql ="SELECT id, category_code, category_name\n" +
-                "FROM Tutor_B3.category;";
+                "FROM category;";
         // B2: Goi connection
         try (Connection con = DBConnect.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)
@@ -41,7 +41,7 @@ public class CategoryRepository {
     public Category getOne(Long id1){
         // B1: Tao cau lenh SQL
         String sql ="SELECT id, category_code, category_name\n" +
-                "FROM Tutor_B3.category WHERE id = ?;";
+                "FROM category WHERE id = ?;";
         // B2: Goi connection
         try (Connection con = DBConnect.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)
@@ -65,7 +65,7 @@ public class CategoryRepository {
     public boolean add(Category cate){
         int check = 0; // chua add thanh cong
         // B1: Tao cau lenh SQL
-        String sql ="INSERT INTO Tutor_B3.category\n" +
+        String sql ="INSERT INTO category\n" +
                 "(id, category_code, category_name)\n" +
                 "VALUES(?,?,?);";
         // B2: Goi connection
@@ -84,7 +84,7 @@ public class CategoryRepository {
     public boolean delete(Long id){
         int check = 0; // chua add thanh cong
         // B1: Tao cau lenh SQL
-        String sql ="DELETE FROM Tutor_B3.category\n" +
+        String sql ="DELETE FROM category\n" +
                 "WHERE id=?;";
         // B2: Goi connection
         try (Connection con = DBConnect.getConnection();
@@ -101,7 +101,7 @@ public class CategoryRepository {
     public boolean update(Category categoryUpdate, Long idCanUpdate){
         int check = 0; // chua add thanh cong
         // B1: Tao cau lenh SQL
-        String sql ="UPDATE Tutor_B3.category\n" +
+        String sql ="UPDATE category\n" +
                 "SET category_code= ?, category_name=?\n" +
                 "WHERE id=?;";
         // B2: Goi connection
@@ -118,7 +118,61 @@ public class CategoryRepository {
         return check > 0;
     }
 
+    // Tim kiem theo ten
+    public List<Category>searchByName(String name){
+        // Logic => Get all
+        List<Category> lists = new ArrayList<>();
+        // Code
+        // B1: Tao cau lenh SQL
+        String sql ="SELECT id, category_code, category_name\n" +
+                "FROM category WHERE category_name LIKE ? ;";
+        // B2: Goi connection
+        try (Connection con = DBConnect.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)
+        ){
+            ps.setObject(1,"%"+name+"%");
+            // tao table => thu thi cau lenh sql
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Category cate = new Category();
+                cate.setId(rs.getLong(1));
+                cate.setCategoryName(rs.getString(3));
+                cate.setCategoryCode(rs.getString(2));
+                lists.add(cate);
+            }
+        }catch (Exception e){
+            e.printStackTrace(System.out);
+        }
+        return lists;
+    }
+
+    public List<Category>sapXepGianDanTheoTen(){
+        // Logic => Get all
+        List<Category> lists = new ArrayList<>();
+        // Code
+        // B1: Tao cau lenh SQL
+        String sql ="SELECT id, category_code, category_name\n" +
+                "FROM category ORDER BY category_name DESC ;";
+        // B2: Goi connection
+        try (Connection con = DBConnect.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)
+        ){
+            // tao table => thu thi cau lenh sql
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Category cate = new Category();
+                cate.setId(rs.getLong(1));
+                cate.setCategoryName(rs.getString(3));
+                cate.setCategoryCode(rs.getString(2));
+                lists.add(cate);
+            }
+        }catch (Exception e){
+            e.printStackTrace(System.out);
+        }
+        return lists;
+    }
+
     public static void main(String[] args) {
-        System.out.println(new CategoryRepository().getAll());
+        System.out.println(new CategoryRepository().searchByName("3"));
     }
 }
